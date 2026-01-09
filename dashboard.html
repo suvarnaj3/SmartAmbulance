@@ -1,0 +1,184 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Smart Ambulance Dashboard</title>
+    <link rel="stylesheet" href="dashboard.css" />
+
+    <style>
+        /* Layout: Sidebar + Main Content */
+        .container {
+            display: flex;
+            min-height: 100vh;
+        }
+
+        /* Sidebar Dashboard */
+        .dashboard {
+            width: 250px;
+            background: #333;
+            color: white;
+            padding: 10px;
+            min-height: 100vh;
+        }
+
+        /* Dashboard header with logo */
+        .dashboard-header {
+            display: flex;
+            align-items: center;
+            padding: 10px 15px;
+        }
+
+        .logo {
+            width: 50px; /* Small logo size */
+            height: auto;
+            margin-right: 15px;
+        }
+
+        .dashboard h2 {
+            margin: 0;
+            font-size: 1.3rem;
+        }
+
+        .dashboard ul {
+            list-style: none;
+            padding: 0;
+        }
+
+        .dashboard ul li {
+            padding: 10px 0;
+        }
+
+        .dashboard ul li a {
+            color: white;
+            text-decoration: none;
+        }
+
+        /* Page Layout Fix */
+        .page-wrapper {
+            display: flex;
+            flex-direction: column;
+            min-height: 100vh; /* Makes the page take up full height */
+        }
+
+        .main-content {
+            flex-grow: 1; /* Pushes the footer to the bottom */
+            padding: 20px;
+            background: #f4f4f4;
+            max-width: 900px;
+            text-align: center;
+            margin: 0 auto; /* Centers the main content */
+            display: flex;
+            flex-direction: column;
+            align-items: center; /* Ensures everything inside stays centered */
+        }
+
+        .stats {
+            display: flex;
+            gap: 15px;
+            flex-wrap: wrap;
+            justify-content: center;
+        }
+
+        .stat-card {
+            background: white;
+            padding: 15px;
+            border-radius: 8px;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+            width: 200px;
+            text-align: center;
+        }
+
+        .emergency-btn {
+            background: red;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            font-size: 16px;
+            cursor: pointer;
+            border-radius: 5px;
+            margin-top: 20px;
+        }
+
+        /* Footer Styling */
+        footer {
+            text-align: center;
+            padding: 10px;
+            background: #333;
+            color: white;
+            width: 100%;
+            margin-top: auto; /* Pushes footer to the bottom */
+        }
+    </style>
+</head>
+<body>
+
+<div class="page-wrapper">
+    <div class="container">
+        <!-- Sidebar Dashboard -->
+        <div class="dashboard">
+            <div class="dashboard-header">
+                <img src="ambulance.jpg" alt="Logo" class="logo">
+                <h2>Smart Ambulance</h2>
+            </div>
+            
+            <ul>
+                <li><a href="index2.html">Register Patient</a></li>
+                <li><a href="retrieve.html">Retrieve Patient Data</a></li>
+                <li><a href="Tracker.html">Track Ambulance</a></li>
+                <li><a href="doclogin.html">Doctor Login</a></li>
+                <li><a href="driverlogin.html">Driver Login</a></li>
+                <li><a href="hospital.html">Hospital Availability</a></li>
+                <li><a href="pharmacy.html">Pharmacy Locator</a></li>
+                <li><a class="track-btn" href="tracker.html">Start Tracking 🚑</a></li>
+            </ul>
+        </div>
+
+        <!-- Main Content Area -->
+        <div class="main-content">
+            <header>
+                <h1>Welcome to the Smart Ambulance System</h1>
+                <p>Real-time health and emergency management system.</p>
+            </header>
+
+            <!-- Stats Section -->
+            <div class="stats">
+                <div class="stat-card">
+                    <h3>Active Ambulances</h3>
+                    <p>5</p>
+                </div>
+                <div class="stat-card">
+                    <h3>Available Beds</h3>
+                    <p>24</p>
+                </div>
+                <div class="stat-card">
+                    <h3>Emergency Calls</h3>
+                    <p>12</p>
+                </div>
+                <div class="stat-card">
+                    <h3>Pharmacies Nearby</h3>
+                    <p>8</p>
+                </div>
+            </div>
+
+            <!-- Emergency Button -->
+            <button class="emergency-btn" onclick="triggerEmergency()">🚨 Emergency Call</button>
+        </div>
+    </div>
+
+    <!-- Footer -->
+    <footer>
+        &copy; 2025 Smart Ambulance System | All Rights Reserved
+    </footer>
+</div>
+
+<!-- JavaScript for Emergency Button -->
+<script>
+    function triggerEmergency() {
+        alert('🚨 Emergency Call Initiated! Contact: 112 (India) for Ambulance Services');
+    }
+</script>
+
+</body>
+</html>
+

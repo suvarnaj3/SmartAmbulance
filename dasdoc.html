@@ -1,0 +1,102 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Doctor Dashboard - Patient Records</title>
+    <script src="https://www.gstatic.com/firebasejs/9.6.1/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.6.1/firebase-auth-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.6.1/firebase-database-compat.js"></script>
+    <link rel="stylesheet" href="style.css">
+    <style>
+        body { font-family: Arial, sans-serif; margin: 20px; }
+        .container { width: 80%; margin: auto; padding: 20px; border-radius: 10px; background: #f9f9f9; }
+        table { width: 100%; border-collapse: collapse; margin-top: 20px; }
+        th, td { border: 1px solid #ccc; padding: 10px; text-align: left; }
+        th { background: #007bff; color: white; }
+        button { padding: 8px; background: red; color: white; border: none; cursor: pointer; }
+    </style>
+</head>
+<body>
+
+    <h2>Doctor Dashboard</h2>
+    <button onclick="logout()">Logout</button>
+
+    <div class="container">
+        <h3>Patient Records</h3>
+        <table>
+            <thead>
+                <tr>
+                    <th>Aadhar ID</th>
+                    <th>Name</th>
+                    <th>Gender</th>
+                    <th>Age</th>
+                    <th>Blood Group</th>
+                    <th>Medical History</th>
+                    <th>Emergency Contact</th>
+                </tr>
+            </thead>
+            <tbody id="patientTableBody"></tbody>
+        </table>
+    </div>
+
+    <script>
+        // ✅ Firebase Configuration
+        const firebaseConfig = {
+            apiKey: "AIzaSyD1cOeJyk3ju6FDu9Nxhry2I...",
+            authDomain: "smart-ambulance-65197.firebaseapp.com",
+            databaseURL: "https://smart-ambulance-65197-default-rtdb.asia-southeast1.firebasedatabase.app",
+            projectId: "smart-ambulance-65197",
+            storageBucket: "smart-ambulance-65197.appspot.com",
+            messagingSenderId: "942621318647",
+            appId: "1:942621318647:web:3f08ded808d9214723e2f2"
+        };
+
+        // ✅ Initialize Firebase
+        firebase.initializeApp(firebaseConfig);
+        const auth = firebase.auth();
+        const db = firebase.database();
+
+        // ✅ Ensure only logged-in doctors can access this page
+        auth.onAuthStateChanged(user => {
+            if (!user) {
+                alert("Access Denied! Please log in first.");
+                window.location.href = 'doctor_login.html';
+            } else {
+                loadPatients();
+            }
+        });
+
+        // ✅ Fetch and Display Patients Data
+        function loadPatients() {
+            db.ref('patients').once('value', snapshot => {
+                const patientTableBody = document.getElementById('patientTableBody');
+                patientTableBody.innerHTML = "";
+
+                snapshot.forEach(childSnapshot => {
+                    const patient = childSnapshot.val();
+                    const row = `<tr>
+                        <td>${childSnapshot.key}</td>
+                        <td>${patient.name}</td>
+                        <td>${patient.gender}</td>
+                        <td>${patient.age}</td>
+                        <td>${patient.bloodGroup}</td>
+                        <td>${patient.medicalHistory}</td>
+                        <td>${patient.emergencyContact}</td>
+                    </tr>`;
+                    patientTableBody.innerHTML += row;
+                });
+            });
+        }
+
+        // ✅ Logout Function
+        function logout() {
+            auth.signOut().then(() => {
+                alert("Logged out!");
+                window.location.href = 'doctor_login.html';
+            }).catch(error => alert("Logout Failed: " + error.message));
+        }
+    </script>
+
+</body>
+</html>

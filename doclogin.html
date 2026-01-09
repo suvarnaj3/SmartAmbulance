@@ -1,0 +1,174 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Smart Ambulance System</title>
+    <link rel="stylesheet" href="style.css">
+
+    <!-- Firebase Scripts -->
+    <script src="https://www.gstatic.com/firebasejs/9.6.1/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.6.1/firebase-database-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.6.1/firebase-auth-compat.js"></script>
+</head>
+<body>
+
+<div class="container" id="authContainer">
+    <h2 id="authTitle">Doctor Login</h2>
+
+    <input type="email" id="email" placeholder="Enter Email" required>
+    <input type="password" id="password" placeholder="Enter Password" required>
+
+    <!-- Signup Fields (Hidden by Default) -->
+    <input type="text" id="doctorName" placeholder="Doctor Name" style="display: none;">
+    <input type="text" id="doctorId" placeholder="Doctor ID" style="display: none;">
+    <input type="text" id="hospitalName" placeholder="Hospital Name" style="display: none;">
+
+    <button onclick="handleAuth()" id="authButton">Login</button>
+    <p id="authMessage"></p>
+
+    <!-- Toggle between Login & Signup -->
+    <p>
+        <span id="toggleMessage">Don't have an account?</span> 
+        <a href="#" onclick="toggleAuthMode()">Sign Up</a>
+    </p>
+</div>
+
+<div class="container" id="patientDataContainer" style="display:none;">
+    <h2>Retrieve Patient Data</h2>
+    <input type="text" id="searchId" placeholder="Enter Aadhar ID" required>
+    <button onclick="getPatient()">Get Details</button>
+    <p id="result">Patient details will appear here...</p>
+
+    <a href="dashboard.html" class="home-link">Go Back to Main Page</a>
+</div>
+
+<script>
+    // Firebase Configuration
+    const firebaseConfig = {
+        apiKey: "AIzaSyD1cOeJyk3ju6FDu9Nxhry2iTith7wXD14",
+        authDomain: "smart-ambulance-65197.firebaseapp.com",
+        databaseURL: "https://smart-ambulance-65197-default-rtdb.asia-southeast1.firebasedatabase.app",
+        projectId: "smart-ambulance-65197",
+        storageBucket: "smart-ambulance-65197.appspot.com",
+        messagingSenderId: "942621318647",
+        appId: "1:942621318647:web:3f08ded808d9214723e2f2"
+    };
+
+    // Initialize Firebase
+    firebase.initializeApp(firebaseConfig);
+    const db = firebase.database();
+    const auth = firebase.auth();
+
+    let isSignup = false; // Track authentication mode
+
+    function toggleAuthMode() {
+        isSignup = !isSignup;
+        
+        if (isSignup) {
+            document.getElementById("authTitle").innerText = "Doctor Signup";
+            document.getElementById("authButton").innerText = "Sign Up";
+            document.getElementById("toggleMessage").innerText = "Already have an account?";
+            document.querySelector("a").innerText = "Login";
+
+            // Show signup fields
+            document.getElementById("doctorName").style.display = "block";
+            document.getElementById("doctorId").style.display = "block";
+            document.getElementById("hospitalName").style.display = "block";
+        } else {
+            document.getElementById("authTitle").innerText = "Doctor Login";
+            document.getElementById("authButton").innerText = "Login";
+            document.getElementById("toggleMessage").innerText = "Don't have an account?";
+            document.querySelector("a").innerText = "Sign Up";
+
+            // Hide signup fields
+            document.getElementById("doctorName").style.display = "none";
+            document.getElementById("doctorId").style.display = "none";
+            document.getElementById("hospitalName").style.display = "none";
+        }
+    }
+
+    function handleAuth() {
+        const doctorName = document.getElementById('doctorName').value.trim();
+        const doctorId = document.getElementById('doctorId').value.trim();
+        const email = document.getElementById('email').value.trim();
+        const password = document.getElementById('password').value.trim();
+        const hospitalName = document.getElementById('hospitalName').value.trim();
+        const authMessage = document.getElementById('authMessage');
+
+        if (!email || !password) {
+            authMessage.innerText = "Please fill in all required fields.";
+            return;
+        }
+
+        if (isSignup) {
+            if (!doctorName || !doctorId || !hospitalName) {
+                authMessage.innerText = "Please enter your Doctor Name, ID, and Hospital Name.";
+                return;
+            }
+
+            // Signup
+            auth.createUserWithEmailAndPassword(email, password)
+                .then(userCredential => {
+                    // Store doctor details in Firebase Database
+                    db.ref('doctors/' + userCredential.user.uid).set({
+                        doctorName: doctorName,
+                        doctorId: doctorId,
+                        email: email,
+                        hospital: hospitalName
+                    });
+
+                    authMessage.innerText = "Signup successful! You can now log in.";
+                    toggleAuthMode(); // Switch back to login mode
+                })
+                .catch(error => {
+                    authMessage.innerText = "Error: " + error.message;
+                });
+
+        } else {
+            // Login
+            auth.signInWithEmailAndPassword(email, password)
+                .then(() => {
+                    authMessage.innerText = "Login successful!";
+                    document.getElementById('authContainer').style.display = 'none';
+                    document.getElementById('patientDataContainer').style.display = 'block';
+                })
+                .catch(error => {
+                    authMessage.innerText = "Error: " + error.message;
+                });
+        }
+    }
+
+    function getPatient() {
+        const searchId = document.getElementById('searchId').value.trim();
+        
+        if (!searchId) {
+            alert("Please enter a valid Aadhar ID.");
+            return;
+        }
+
+        db.ref('patients/' + searchId).get().then(snapshot => {
+            if (snapshot.exists()) {
+                const data = snapshot.val();
+                document.getElementById('result').innerHTML = `
+                    <strong>Name:</strong> ${data.name} <br>
+                    <strong>Gender:</strong> ${data.gender} <br>
+                    <strong>Age:</strong> ${data.age} years <br>
+                    <strong>Blood Group:</strong> ${data.bloodGroup} <br>
+                    <strong>Medical History:</strong> ${data.medicalHistory || 'N/A'} <br>
+                    <strong>Emergency Contact:</strong> ${data.emergencyContact}
+                `;
+            } else {
+                document.getElementById('result').innerHTML = `<span style="color: red;">No data found for this Aadhar ID!</span>`;
+            }
+        }).catch(error => {
+            console.error("Error fetching data:", error);
+            alert("An error occurred while retrieving data.");
+        });
+    }
+</script>
+</body>
+</html>
+
+
+

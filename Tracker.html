@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Ambulance Tracker</title>
+    <link rel="stylesheet" href="style (3).css">
+    <link rel="stylesheet" href="https://unpkg.com/leaflet/dist/leaflet.css" />
+    <script src="https://unpkg.com/leaflet/dist/leaflet.js"></script>
+</head>
+<body>
+
+<h2>Ambulance Route Tracker</h2>
+<div class="container">
+    <input type="text" id="toLocation" placeholder="To: Location or Pincode">
+    <button onclick="findRoute()">Find Route</button>
+    <button onclick="trackLocation()">Track Location</button>
+</div>
+
+<div id="map"></div>
+
+<!-- Container to show nearby places -->
+<div id="places-list"></div>
+
+<script src="tracker (1).js"></script>
+</body>
+</html>
+
+
+

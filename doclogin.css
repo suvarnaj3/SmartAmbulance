@@ -1,0 +1,94 @@
+body {
+    font-family: Arial, sans-serif;
+    background-color: #5b8570;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+    margin: 0;
+}
+
+.container {
+    background-color: #3e6b58;
+    padding: 20px;
+    border-radius: 12px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);  /* Slightly deeper shadow */
+    width: 320px;
+    text-align: center;
+    transition: transform 0.3s, box-shadow 0.3s;  /* Hover effect */
+}
+
+.container:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2);
+}
+
+h2, h3 {
+    color: #ffffff;
+}
+
+form input {
+    width: 90%;
+    padding: 10px;
+    margin: 10px 0;
+    border: none;
+    border-radius: 6px;
+    background-color: #ffffff;
+}
+
+input[type="file"] {
+    color: #ffffff;
+    background-color: #4f7b66;
+    padding: 8px;
+    border-radius: 6px;
+    border: none;
+    cursor: pointer;
+    transition: background-color 0.3s;  /* Added hover transition */
+}
+
+input[type="file"]::file-selector-button {
+    background-color: #3e6b58;
+    color: #ffffff;
+    border: none;
+    padding: 5px 10px;
+    border-radius: 6px;
+    cursor: pointer;
+    transition: background-color 0.3s;
+}
+
+input[type="file"]:hover {
+    background-color: #3e6b58;  /* Added hover effect */
+}
+
+input[type="file"]::file-selector-button:hover {
+    background-color: #4f7b66;
+}
+
+button {
+    width: 100%;
+    padding: 10px;
+    background-color: #4f7b66;
+    color: #ffffff;
+    border: none;
+    border-radius: 6px;
+    cursor: pointer;
+    transition: background-color 0.3s;
+    font-weight: bold;  /* Added for better readability */
+}
+
+button:hover {
+    background-color: #3e6b58;
+}
+
+p {
+    color: #ffffff;
+}
+
+a {
+    color: #c8e6c9;
+    text-decoration: none;
+}
+
+a:hover {
+    text-decoration: underline;
+}
